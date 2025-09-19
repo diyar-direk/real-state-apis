@@ -15,6 +15,12 @@ app.use(morgan(":method :url :status :response-time ms"));
 
 const routers = {
   users: "users/usersRouter",
+  contractors: "users/contactorsRouter",
+  city: "address/cityRouter",
+  region: "address/regionRouter",
+  "property-type": "property/propertyTypeRouter",
+  "property-status": "property/propertyStatusRouter",
+  properties: "property/propertyRouter",
 };
 
 Object.entries(routers).forEach(([path, router]) => {

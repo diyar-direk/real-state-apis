@@ -54,11 +54,12 @@ class APIServerHelper {
     }
   };
 
-  deleteMany = async (req, res) => {
+  deleteMany = async (req, res, cb = () => {}) => {
     try {
       const { ids } = req.body;
       if (!Array.isArray(ids) || ids.length === 0)
         return res.status(400).json({ message: "ids must be not empty array" });
+      cb(ids);
       const deletedData = await this.model.deleteMany({ _id: { $in: ids } });
       res.json({
         message: `${deletedData.deletedCount} item deleted successfully`,
@@ -68,19 +69,29 @@ class APIServerHelper {
     }
   };
 
-  createOne = async (req, res, data = req.body) => {
+  createOne = async (
+    req,
+    res,
+    data = req.body,
+    onSuccess = () => {},
+    onError = () => {}
+  ) => {
     data.createdBy = req.currentUser?._id;
     try {
       const newData = await this.model.create(data);
-      res
-        .status(201)
-        .json({ message: "created new item successfully", data: newData });
+      const finalData =
+        (await onSuccess({ data: newData, res, req })) || newData;
+      res.status(201).json({
+        message: "created new item successfully",
+        data: finalData,
+      });
     } catch (error) {
-      return res.status(400).json({ message: error.message });
+      onError({ error, req, res });
+      res.status(400).json({ message: error.message });
     }
   };
 
-  updateOneById = async (req, res, data = req.body) => {
+  updateOneById = async (req, res, data = req.body, cb = () => {}) => {
     try {
       const { id } = req.params;
       const updatedData = await this.model.findByIdAndUpdate(id, data, {
@@ -89,6 +100,7 @@ class APIServerHelper {
       });
       if (!updatedData) return res.status(404).json({ message: "not found" });
       res.json({ message: "operation done successfully", data: updatedData });
+      cb();
     } catch (error) {
       return res.status(400).json({ message: error.message });
     }

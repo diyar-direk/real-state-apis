@@ -7,10 +7,12 @@ class APIServerHelper {
     this.model = model;
   }
 
-  getAll = async (req, res, searchFields, populate = []) => {
+  getAll = async (req, res, searchFields, populate = [], withoutCreatedBy) => {
     const populatedData = [
       ...populate,
-      { path: "createdBy", select: "username _id" },
+      ...(withoutCreatedBy
+        ? []
+        : [{ path: "createdBy", select: "username _id" }]),
     ];
     if (req.query.search)
       return search(this.model, searchFields, populatedData, req, res);
@@ -39,10 +41,12 @@ class APIServerHelper {
     }
   };
 
-  getById = async (req, res, populate = []) => {
+  getById = async (req, res, populate = [], withoutCreatedBy) => {
     const populatedData = [
       ...populate,
-      { path: "createdBy", select: "username _id" },
+      ...(withoutCreatedBy
+        ? []
+        : [{ path: "createdBy", select: "username _id" }]),
     ];
     try {
       const { id } = req.params;
@@ -59,7 +63,7 @@ class APIServerHelper {
       const { ids } = req.body;
       if (!Array.isArray(ids) || ids.length === 0)
         return res.status(400).json({ message: "ids must be not empty array" });
-      cb(ids);
+      await cb(ids);
       const deletedData = await this.model.deleteMany({ _id: { $in: ids } });
       res.json({
         message: `${deletedData.deletedCount} item deleted successfully`,

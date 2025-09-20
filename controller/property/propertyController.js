@@ -15,7 +15,6 @@ const getAllProperties = (req, res) =>
       { path: "city", select: "name" },
       { path: "region", select: "name" },
       { path: "contractorId", select: "firstName" },
-      { path: "images", select: "src", options: { limit: 1 } },
     ]
   );
 
@@ -31,13 +30,18 @@ const propertyById = (req, res) =>
 
 const addProperty = async (req, res) => {
   const { body, files } = req;
-  const images = files || [];
-  if (images.length === 0 || images.length > 5)
-    return res.status(400).json({ message: "you must to select 1-5 images" });
+  const images = files?.images || [];
+
+  const coverImage = files?.coverImage?.[0]?.filename || null;
+
+  if (images.length > 5)
+    return res
+      .status(400)
+      .json({ message: "you can not select more then 5 images" });
   apiServer.createOne(
     req,
     res,
-    body,
+    { ...body, coverImage },
     async ({ data }) => {
       const propertyImages = await Promise.all(
         images.map((img) =>
@@ -48,6 +52,7 @@ const addProperty = async (req, res) => {
     },
     () => {
       images.map((src) => unlinkFile(src.filename, "property"));
+      unlinkFile(coverImage, "property");
     }
   );
 };
@@ -55,21 +60,28 @@ const addProperty = async (req, res) => {
 const updateProperty = async (req, res) => {
   const { id } = req.params;
   const { body, files } = req;
+  const newCoverImage = files?.coverImage?.[0]?.filename || null;
 
-  const checkProperty = await Property.findById(id).populate({
-    path: "images",
-    select: "_id",
-  });
+  const checkProperty = await Property.findById(id)
+    .populate({
+      path: "images",
+      select: "_id",
+    })
+    .select("coverImage");
 
   if (!checkProperty)
     return res.status(404).json({ message: "property not found" });
+  if (newCoverImage) body.coverImage = newCoverImage;
 
-  const newImages = files || [];
+  const newImages = files.images || [];
   const imagesLength = newImages?.length + checkProperty.images.length;
 
-  if (imagesLength > 5 || imagesLength === 0) {
+  if (imagesLength > 5) {
     newImages?.map((img) => unlinkFile(img.filename, "property"));
-    return res.status(400).json({ message: "you must to select 1-5 images" });
+    unlinkFile(newCoverImage, "property");
+    return res
+      .status(400)
+      .json({ message: "you can not select more then 5 images" });
   }
 
   try {
@@ -77,6 +89,7 @@ const updateProperty = async (req, res) => {
       new: true,
       runValidators: true,
     });
+    unlinkFile(checkProperty.coverImage, "property");
 
     const images = await Promise.all(
       newImages?.map((img) =>
@@ -91,7 +104,7 @@ const updateProperty = async (req, res) => {
     res.json({ message: "updated successfully", data });
   } catch (error) {
     res.status(400).json({ message: error.message });
-
+    unlinkFile(newCoverImage, "property");
     newImages?.map((img) => unlinkFile(img.filename, "property"));
   }
 };
@@ -100,10 +113,16 @@ const deleteProperty = async (req, res) =>
   apiServer.deleteMany(req, res, async (ids) => {
     const images = await PropertyImage.find({
       propertyId: { $in: ids },
-    }).lean();
+    })
+      .select("src")
+      .lean();
 
+    const properties = await Property.find({ _id: { $in: ids } })
+      .select("coverImage")
+      .lean();
+
+    properties.forEach((p) => unlinkFile(p.coverImage, "property"));
     images.forEach((img) => unlinkFile(img.src, "property"));
-
     await PropertyImage.deleteMany({ propertyId: { $in: ids } });
   });
 

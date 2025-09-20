@@ -14,7 +14,11 @@ const upload = createUploader("../public/images/property");
 router
   .route("/")
   .get(getAllProperties)
-  .post(allowedTo("Admin", "Contractor"), upload.array("images"), addProperty)
+  .post(
+    allowedTo("Admin", "Contractor"),
+    upload.fields([{ name: "images" }, { name: "coverImage" }]),
+    addProperty
+  )
   .delete(allowedTo("Admin", "Contractor"), deleteProperty);
 
 router
@@ -22,7 +26,7 @@ router
   .get(propertyById)
   .patch(
     allowedTo("Admin", "Contractor"),
-    upload.array("images"),
+    upload.fields([{ name: "images" }, { name: "coverImage" }]),
     updateProperty
   );
 

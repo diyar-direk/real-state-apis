@@ -1,0 +1,19 @@
+{
+	"info": {
+		"_postman_id": "b5457e3c-d50a-43dd-bfe9-e85fbfb8e7bb",
+		"name": "images",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "42374119"
+	},
+	"item": [
+		{
+			"name": "show",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}images/1758375922237-Generated-Image-September-11,-2025---10_15PM.png"
+			},
+			"response": []
+		}
+	]
+}

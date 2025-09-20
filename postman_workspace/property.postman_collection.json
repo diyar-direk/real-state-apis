@@ -1,0 +1,533 @@
+{
+	"info": {
+		"_postman_id": "7ad55bd6-0806-4a65-a730-3129a0c9292f",
+		"name": "property",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "42374119"
+	},
+	"item": [
+		{
+			"name": "type",
+			"item": [
+				{
+					"name": "all types",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}property-type"
+					},
+					"response": []
+				},
+				{
+					"name": "add type",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"villa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}property-type"
+					},
+					"response": []
+				},
+				{
+					"name": "delete types",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ids\":[\"68c7c3e25eda29568beeea7d\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}property-type"
+					},
+					"response": []
+				},
+				{
+					"name": "type by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}property-type/68c7c4175eda29568beeea80"
+					},
+					"response": []
+				},
+				{
+					"name": "update type",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Villa\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}property-type/68c7c4175eda29568beeea80"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "status",
+			"item": [
+				{
+					"name": "all status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}property-status"
+					},
+					"response": []
+				},
+				{
+					"name": "add status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"sold\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}property-status"
+					},
+					"response": []
+				},
+				{
+					"name": "delete status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ids\":[\"68c7c602fe4522b5383b82d4\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}property-status"
+					},
+					"response": []
+				},
+				{
+					"name": "status by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}property-status/68c7c627fe4522b5383b82d8"
+					},
+					"response": []
+				},
+				{
+					"name": "update status",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"rent\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}property-status/68c7c627fe4522b5383b82d8"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "property",
+			"item": [
+				{
+					"name": "add property",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Users/Diyar-react/Downloads/Generated Image September 11, 2025 - 10_15PM.png"
+								},
+								{
+									"key": "title",
+									"value": "title",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "description",
+									"type": "text"
+								},
+								{
+									"key": "type",
+									"value": "68c7c4175eda29568beeea80",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "68c7c627fe4522b5383b82d8",
+									"type": "text"
+								},
+								{
+									"key": "area",
+									"value": "200",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "100",
+									"type": "text"
+								},
+								{
+									"key": "floorsCount",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "roomsCount",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "isFrunished",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "yearBuilt",
+									"value": "2000",
+									"type": "text"
+								},
+								{
+									"key": "featuers",
+									"value": "none",
+									"type": "text"
+								},
+								{
+									"key": "city",
+									"value": "68c704f0331e985a68b03c76",
+									"type": "text"
+								},
+								{
+									"key": "region",
+									"value": "68cd998c7b59f4c4456694d5",
+									"type": "text"
+								},
+								{
+									"key": "nearbyPlaces",
+									"value": "none",
+									"type": "text"
+								},
+								{
+									"key": "addressDetails",
+									"value": "none",
+									"type": "text"
+								},
+								{
+									"key": "coordinant",
+									"value": "none",
+									"type": "text"
+								},
+								{
+									"key": "contactNumber",
+									"value": "0936038904",
+									"type": "text"
+								},
+								{
+									"key": "contractorId",
+									"value": "68c7cf118d171e1595744f59",
+									"type": "text"
+								},
+								{
+									"key": "coverImage",
+									"type": "file",
+									"src": "/C:/Users/Diyar-react/Downloads/WhatsApp Image 2025-09-11 at 20.28.34_5db39bc8.jpg"
+								}
+							]
+						},
+						"url": "{{base_url}}properties"
+					},
+					"response": []
+				},
+				{
+					"name": "all properties",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}properties",
+							"host": [
+								"{{base_url}}properties"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "property by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}properties/68ceaff2e9598d80fbc27eab"
+					},
+					"response": []
+				},
+				{
+					"name": "update property",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "test",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Users/Diyar-react/Downloads/WhatsApp Image 2025-09-11 at 20.28.35_b59b1fe3.jpg",
+									"disabled": true
+								},
+								{
+									"key": "coverImage",
+									"type": "file",
+									"src": "/C:/Users/Diyar-react/Downloads/WhatsApp Image 2025-09-11 at 20.28.32_3ff16e95.jpg"
+								},
+								{
+									"key": "price",
+									"value": "400",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}properties/68cea118daca7a85571805c5"
+					},
+					"response": []
+				},
+				{
+					"name": "delete properties",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ids\":[\"68cea118daca7a85571805c5\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}properties"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "images",
+			"item": [
+				{
+					"name": "all images",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}property-images"
+					},
+					"response": []
+				},
+				{
+					"name": "image by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}property-images/68cd9a58ffd2d22de5698685"
+					},
+					"response": []
+				},
+				{
+					"name": "delete images",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ids\":[\"68ceb0219ca9d005c61c1326\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}property-images"
+					},
+					"response": []
+				},
+				{
+					"name": "add images",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "images",
+									"type": "file",
+									"src": "/C:/Users/Diyar-react/Downloads/WhatsApp Image 2025-09-11 at 20.28.32_11323c72.jpg"
+								},
+								{
+									"key": "propertyId",
+									"value": "68ceaff2e9598d80fbc27eab",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}property-images"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

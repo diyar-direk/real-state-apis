@@ -1,0 +1,377 @@
+{
+	"info": {
+		"_postman_id": "c3a87994-d22d-474b-a25c-0867201476b8",
+		"name": "users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "42374119"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "all users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}users",
+							"host": [
+								"{{base_url}}users"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "Admin",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"contractor\",\r\n    \"password\":\"contractor123\",\r\n    \"role\":\"Contractor\",\r\n    \"profileId\":\"68c7cac6fea1f20c0884b17b\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"token\",pm.response.json().token)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"admin123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}users/login"
+					},
+					"response": []
+				},
+				{
+					"name": "delete users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ids\":[\"68c6f55dbaec34935065a206\",\"68c5d5e473200c9590a1ad41\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}users"
+					},
+					"response": []
+				},
+				{
+					"name": "user by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}users/68c697f8f9f8b8ba6ceef19b"
+					},
+					"response": []
+				},
+				{
+					"name": "update user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"role\":\"Admin\",\r\n    \"username\":\"admin2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}users/68c697f8f9f8b8ba6ceef19b"
+					},
+					"response": []
+				},
+				{
+					"name": "my profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}users/me"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "contractor",
+			"item": [
+				{
+					"name": "add contractor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profile",
+									"type": "file",
+									"src": "/C:/Users/Diyar-react/Downloads/WhatsApp Image 2025-09-11 at 20.28.35_b59b1fe3.jpg"
+								},
+								{
+									"key": "firstName",
+									"value": "diyar",
+									"type": "text"
+								},
+								{
+									"key": "middleName",
+									"value": "berzani",
+									"type": "text"
+								},
+								{
+									"key": "lastName",
+									"value": "direki",
+									"type": "text"
+								},
+								{
+									"key": "gender",
+									"value": "Male",
+									"type": "text"
+								},
+								{
+									"key": "birthDate",
+									"value": "2003-10-11",
+									"type": "text"
+								},
+								{
+									"key": "birthPlace",
+									"value": "qamishlo",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "0936038904",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "diyar2direki111@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "address",
+									"value": "qamishlo",
+									"type": "text"
+								},
+								{
+									"key": "education",
+									"value": "it-engreer",
+									"type": "text"
+								},
+								{
+									"key": "experienceYears",
+									"value": "3",
+									"type": "text"
+								},
+								{
+									"key": "resum",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "links",
+									"value": "[]",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}contractors"
+					},
+					"response": []
+				},
+				{
+					"name": "all contractors",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}contractors"
+					},
+					"response": []
+				},
+				{
+					"name": "delete contractors",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"ids\":[\"68c6fee598f66033d80eb6f0\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}contractors"
+					},
+					"response": []
+				},
+				{
+					"name": "contractor by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}contractors/68c6fa9f767187a0ac1b616b"
+					},
+					"response": []
+				},
+				{
+					"name": "update contractor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{token}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profile",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "experienceYears",
+									"value": "2",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{base_url}}contractors/68c7cac6fea1f20c0884b17b"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

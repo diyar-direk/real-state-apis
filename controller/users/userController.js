@@ -3,7 +3,7 @@ const APIServerHelper = require("../../utils/apiServerHelper");
 const apiServer = new APIServerHelper(User);
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Contractor = require("../../model/users/contractorModel");
+const Contractor = require("../../model/contractor/contractorModel");
 
 const getAllUsers = (req, res) =>
   apiServer.getAll(req, res, ["username"], ["profileId"]);
@@ -54,6 +54,10 @@ const login = async (req, res) => {
       .lean();
     if (!user)
       return res.status(400).json({ message: "Wrong username or password" });
+    if (!user.isActive)
+      return res
+        .status(400)
+        .json({ message: "you have to activate your acount" });
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch)
       return res.status(400).json({ message: "Wrong username or password" });
@@ -82,6 +86,10 @@ const getMyProfile = async (req, res) => {
   try {
     const data = await User.findById(req.currentUser._id).populate("profileId");
     if (!data) return res.status(404).json({ message: "user not found" });
+    if (!data.isActive)
+      return res
+        .status(400)
+        .json({ message: "you have to activate your acount" });
     res.json({ message: `welcome back ${data.username}`, data });
   } catch (error) {
     res.status(400).json({ message: error.message });

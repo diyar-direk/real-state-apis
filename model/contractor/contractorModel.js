@@ -85,6 +85,11 @@ const contractorSchema = new mongoose.Schema(
       },
     ],
 
+    city: {
+      ref: "City",
+      type: mongoose.Schema.Types.ObjectId,
+    },
+
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",

@@ -31,13 +31,15 @@ app.get("/api/images/:filename", (req, res) => {
 
 const routers = {
   users: "users/usersRouter",
-  contractors: "users/contactorsRouter",
+  contractors: "contractor/contactorsRouter",
   city: "address/cityRouter",
   region: "address/regionRouter",
   "property-type": "property/propertyTypeRouter",
   "property-status": "property/propertyStatusRouter",
   properties: "property/propertyRouter",
   "property-images": "property/propertyImageRouter",
+  agency: "agency/agencyRouter",
+  home: "home/homeRouter",
 };
 
 Object.entries(routers).forEach(([path, router]) => {

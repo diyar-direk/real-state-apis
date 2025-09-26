@@ -95,7 +95,13 @@ class APIServerHelper {
     }
   };
 
-  updateOneById = async (req, res, data = req.body, cb = () => {}) => {
+  updateOneById = async (
+    req,
+    res,
+    data = req.body,
+    onSuccess = () => {},
+    onError = () => {}
+  ) => {
     try {
       const { id } = req.params;
       const updatedData = await this.model.findByIdAndUpdate(id, data, {
@@ -104,8 +110,9 @@ class APIServerHelper {
       });
       if (!updatedData) return res.status(404).json({ message: "not found" });
       res.json({ message: "operation done successfully", data: updatedData });
-      cb();
+      onSuccess();
     } catch (error) {
+      onError();
       return res.status(400).json({ message: error.message });
     }
   };

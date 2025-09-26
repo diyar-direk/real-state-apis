@@ -7,7 +7,7 @@ const {
   deleteContractor,
   getById,
   updateContractor,
-} = require("../../controller/users/contractorController");
+} = require("../../controller/contractor/contractorController");
 const upload = require("../../middleware/filesMiddleware");
 
 router

@@ -28,6 +28,10 @@ const usersSchema = new mongoose.Schema(
         message: "profileId is required for non-admin users",
       },
     },
+    isActive: {
+      type: Boolean,
+      default: false,
+    },
     createdBy: {
       ref: "Users",
       type: mongoose.Schema.Types.ObjectId,

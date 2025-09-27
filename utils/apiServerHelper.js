@@ -8,6 +8,8 @@ class APIServerHelper {
   }
 
   getAll = async (req, res, searchFields, populate = [], withoutCreatedBy) => {
+    const limit = req.query.limit * 1 || 10;
+
     const populatedData = [
       ...populate,
       ...(withoutCreatedBy
@@ -30,11 +32,14 @@ class APIServerHelper {
         features.query,
         this.model.countDocuments(parsedQuery),
       ]);
+      const totalPages = Math.ceil(totalCount / limit);
       res.json({
         message: "operation done successfully",
         results: data.length,
         totalCount,
         data,
+        limit,
+        totalPages,
       });
     } catch (error) {
       return res.status(400).json({ message: error.message });

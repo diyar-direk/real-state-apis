@@ -4,9 +4,39 @@ const Agency = require("../../model/agency/agencyModel");
 const APIFeatures = require("../../utils/apiFeatures");
 
 const arrayOfQueries = [
-  { key: "contractors", model: Contractor, fields: ["firstName", "lastName"] },
-  { key: "properties", model: Property, fields: ["title", "description"] },
-  { key: "agencies", model: Agency, fields: ["name", "description"] },
+  {
+    key: "contractors",
+    model: Contractor,
+    fields: ["firstName", "lastName"],
+    selectFields:
+      "firstName,lastName,profile,address,education,experienceYears",
+    populate: [],
+  },
+  {
+    key: "properties",
+    model: Property,
+    fields: ["title", "description"],
+    selectFields:
+      "coverImage,title,city,region,status,type,area,floorsCount,roomsCount,price,contractorId",
+    populate: [
+      { path: "city", select: "name" },
+      { path: "region", select: "name" },
+      { path: "status", select: "name" },
+      { path: "type", select: "name" },
+      { path: "contractorId", select: "firstName lastName profile" },
+    ],
+  },
+  {
+    key: "agencies",
+    model: Agency,
+    fields: ["name", "description"],
+    selectFields: "name,description,city,region,phone,logo,contractorId",
+    populate: [
+      { path: "city", select: "name" },
+      { path: "region", select: "name" },
+      { path: "contractorId", select: "firstName lastName" },
+    ],
+  },
 ];
 
 const getHomeContent = async (req, res) => {
@@ -49,12 +79,19 @@ const getHomeContent = async (req, res) => {
       }, {});
     } else {
       const results = await Promise.all(
-        arrayOfQueries.map(async ({ key, model }) => {
-          const features = new APIFeatures(model.find().lean(), req.query)
+        arrayOfQueries.map(async ({ key, model, selectFields, populate }) => {
+          let baseQuery = model.find().lean();
+
+          if (selectFields) {
+            baseQuery = baseQuery.select(selectFields.split(",").join(" "));
+          }
+
+          const features = new APIFeatures(
+            baseQuery.populate(populate),
+            req.query
+          )
             .paginate()
-            .filter()
-            .sort()
-            .fields();
+            .sort();
 
           const data = await features.query;
           return { key, data };

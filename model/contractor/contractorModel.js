@@ -43,9 +43,11 @@ const contractorSchema = new mongoose.Schema(
     },
     education: {
       type: String,
+      required: true,
     },
     experienceYears: {
       type: Number,
+      required: true,
     },
     resume: {
       type: String,

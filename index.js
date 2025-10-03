@@ -12,12 +12,20 @@ connection();
 
 app.use(express.json());
 app.use(cors());
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 app.use(morgan(":method :url :status :response-time ms"));
 
 app.get("/api/images/:filename", (req, res) => {
   const filename = req.params.filename;
-  const dirs = ["public/images/property", "public/images/profiles"];
+  const dirs = [
+    "public/images/property",
+    "public/images/profiles",
+    "public/images/agency",
+  ];
 
   for (const dir of dirs) {
     const filePath = path.join(__dirname, dir, filename);

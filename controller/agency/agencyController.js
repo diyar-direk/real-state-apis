@@ -11,7 +11,7 @@ const allAgency = (req, res) =>
     [
       { path: "city", select: "name" },
       { path: "region", select: "name" },
-      { path: "contractorId", select: "firstName" },
+      { path: "contractors", select: "firstName lastName" },
     ]
   );
 
@@ -19,7 +19,7 @@ const agencyById = (req, res) =>
   apiServer.getById(req, res, [
     { path: "city", select: "name" },
     { path: "region", select: "name" },
-    { path: "contractorId", select: "firstName" },
+    { path: "contractors", select: "firstName lastName" },
   ]);
 
 const createAgency = async (req, res) => {
@@ -51,8 +51,13 @@ const deleteAgencyById = async (req, res) => {
   try {
     const agency = await Agency.findById(id).lean();
     if (!agency) return res.status(404).json({ message: "agency not found" });
+
     if (req.currentUser.role !== "Admin")
-      if (!agency.contractorId.equals(req.currentUser.profileId))
+      if (
+        !agency.contractors.some(
+          (c) => c.toString() === req.currentUser.profileId
+        )
+      )
         return res.status(403).json({ message: "Forbidden" });
 
     await Agency.findByIdAndDelete(id);
@@ -71,12 +76,22 @@ const updateAgency = async (req, res) => {
 
   try {
     const agency = await Agency.findById(id).lean();
+
     if (!agency) return res.status(404).json({ message: "agency not found" });
-    if (req.currentUser.role !== "Admin")
-      if (!agency.contractorId.equals(req.currentUser.profileId)) {
+
+    if (req.currentUser.role !== "Admin") {
+      delete body.contractors;
+      if (
+        !agency.contractors.some(
+          (c) => c.toString() === req.currentUser.profileId
+        )
+      ) {
         unlinkFile(newLogo, "agency");
         return res.status(403).json({ message: "Forbidden" });
       }
+    }
+
+    if (body.contractors) body.contractors = JSON.parse(body.contractors);
 
     if (newLogo) body.logo = newLogo;
 

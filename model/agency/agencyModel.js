@@ -20,10 +20,13 @@ const agencySchema = new mongoose.Schema(
     },
     addressDetails: { type: String },
     coordinant: { type: String },
-    contractorId: {
-      ref: "Contractor",
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
+    contractors: {
+      type: [{ ref: "Contractor", type: mongoose.Schema.Types.ObjectId }],
+
+      validate: {
+        validator: (arr) => arr.length > 0,
+        message: "you have select agencie's owner",
+      },
     },
     createdBy: {
       ref: "Users",

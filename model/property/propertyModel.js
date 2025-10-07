@@ -76,6 +76,10 @@ const propertySchema = mongoose.Schema(
       required: true,
       ref: "Contractor",
     },
+    agencyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Agency",
+    },
     coverImage: {
       type: String,
       required: true,

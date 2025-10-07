@@ -34,7 +34,7 @@ const arrayOfQueries = [
     populate: [
       { path: "city", select: "name" },
       { path: "region", select: "name" },
-      { path: "contractorId", select: "firstName lastName" },
+      { path: "contractors", select: "firstName lastName" },
     ],
   },
 ];

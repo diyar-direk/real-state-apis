@@ -30,7 +30,7 @@ const arrayOfQueries = [
     key: "agencies",
     model: Agency,
     fields: ["name", "description"],
-    selectFields: "name,description,city,region,phone,logo,contractorId",
+    selectFields: "name,description,city,region,phone,logo",
     populate: [
       { path: "city", select: "name" },
       { path: "region", select: "name" },

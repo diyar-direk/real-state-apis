@@ -20,14 +20,16 @@ class APIServerHelper {
       return search(this.model, searchFields, populatedData, req, res);
     try {
       const parsedQuery = parsedQueryHelper(req.query);
+
       const features = new APIFeatures(
         this.model.find().lean().populate(populatedData),
-        req.query
+        req.query,
+        parsedQuery
       )
-        .paginate()
         .filter()
         .sort()
-        .fields();
+        .fields()
+        .paginate();
       const [data, totalCount] = await Promise.all([
         features.query,
         this.model.countDocuments(parsedQuery),

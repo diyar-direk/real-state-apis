@@ -7,7 +7,7 @@ const allAgency = (req, res) =>
   apiServer.getAll(
     req,
     res,
-    ["name"],
+    ["name", "description"],
     [
       { path: "city", select: "name" },
       { path: "region", select: "name" },

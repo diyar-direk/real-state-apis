@@ -1,15 +1,18 @@
 const parsedQueryHelper = require("./parsedQueryHelper");
 
 class APIFeatures {
-  constructor(query, queryString) {
+  constructor(query, queryString, parsedQuery = null) {
     this.query = query;
     this.queryString = queryString;
+    this.parsedQuery = parsedQuery;
   }
+
   filter() {
-    const parsedQuery = parsedQueryHelper(this.queryString);
-    this.query = this.query.find(parsedQuery);
+    const parsed = this.parsedQuery || parsedQueryHelper(this.queryString);
+    this.query = this.query.find(parsed);
     return this;
   }
+
   sort() {
     if (this.queryString.sort) {
       const sortBy = this.queryString.sort.split(",").join(" ");
@@ -19,6 +22,7 @@ class APIFeatures {
     }
     return this;
   }
+
   fields() {
     if (this.queryString.fields) {
       const limitFields = this.queryString.fields.split(",").join(" ");
@@ -28,6 +32,7 @@ class APIFeatures {
     }
     return this;
   }
+
   paginate() {
     const page = this.queryString.page * 1 || 1;
     const limit = this.queryString.limit * 1 || 10;

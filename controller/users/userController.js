@@ -24,14 +24,28 @@ const register = async (req, res) => {
       return res
         .status(400)
         .json({ message: "Password must be at least 6 characters long" });
+
     const password = await bcrypt.hash(passwordBeforeHashed, 10);
-    const createdBy = req.currentUser._id;
+
+    const createdBy = req.currentUser?._id;
+
     const newUser = await User.create({ ...req.body, password, createdBy });
+
     const data = newUser.toObject();
+    const isActive = req.body.isActive || false;
     delete data.password;
     delete data.__v;
-    res.status(201).json({ message: "created new item successfully", data });
+    if (isActive)
+      return res
+        .status(201)
+        .json({ message: `User created successfully`, data });
+
+    res.status(201).json({
+      message: `please wait for admin to activate your account`,
+      data,
+    });
   } catch (error) {
+    console.log(error);
     res.status(400).json({ message: error.message });
   }
 };
@@ -54,6 +68,12 @@ const login = async (req, res) => {
       .lean();
     if (!user)
       return res.status(400).json({ message: "Wrong username or password" });
+
+    if (user.expirationDate && user.expirationDate < new Date()) {
+      await User.updateOne({ _id: user._id }, { isActive: false });
+      return res.status(400).json({ message: "Your account has expired" });
+    }
+
     if (!user.isActive)
       return res
         .status(400)
@@ -67,6 +87,7 @@ const login = async (req, res) => {
         _id: user._id,
         role: user.role,
         profileId: user.profileId?._id || null,
+        expirationDate: user.role === "Admin" ? null : user.expirationDate,
       },
       process.env.JWT_SECRET,
       {
@@ -75,8 +96,11 @@ const login = async (req, res) => {
     );
     delete user.password;
     delete user.__v;
+    const userHello = user.profileId
+      ? `${user.profileId?.firstName} ${user.profileId?.lastName}`
+      : user.username;
 
-    res.json({ message: `welcome back ${user.username}`, data: user, token });
+    res.json({ message: `welcome back ${userHello}`, data: user, token });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -86,6 +110,12 @@ const getMyProfile = async (req, res) => {
   try {
     const data = await User.findById(req.currentUser._id).populate("profileId");
     if (!data) return res.status(404).json({ message: "user not found" });
+
+    if (data.expirationDate && data.expirationDate < new Date()) {
+      await User.updateOne({ _id: data._id }, { isActive: false });
+      return res.status(400).json({ message: "Your account has expired" });
+    }
+
     if (!data.isActive)
       return res
         .status(400)

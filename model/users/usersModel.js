@@ -32,6 +32,9 @@ const usersSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    expirationDate: {
+      type: Date,
+    },
     createdBy: {
       ref: "Users",
       type: mongoose.Schema.Types.ObjectId,
@@ -39,6 +42,16 @@ const usersSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+usersSchema.pre("save", function (next) {
+  if (this.role !== "Admin" && !this.expirationDate) {
+    const oneMonthLater = new Date();
+    oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
+    this.expirationDate = oneMonthLater;
+  }
+  next();
+});
+
 usersSchema.index({ username: 1 }, { unique: true });
 
 usersSchema.index(

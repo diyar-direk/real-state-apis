@@ -37,6 +37,8 @@ app.get("/api/images/:filename", (req, res) => {
   res.status(404).json({ message: "Image not found" });
 });
 
+
+
 const routers = {
   users: "users/usersRouter",
   contractors: "contractor/contactorsRouter",

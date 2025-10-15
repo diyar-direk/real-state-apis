@@ -35,7 +35,6 @@ const contractorSchema = new mongoose.Schema(
     },
     birthPlace: {
       type: String,
-      required: true,
     },
     address: {
       type: String,

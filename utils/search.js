@@ -34,6 +34,7 @@ const search = async (model, fields, populate = "", req, res) => {
       features.query,
       totalResults.query.countDocuments(),
     ]);
+
     return res.status(200).json({
       status: "success",
       totalCount,
@@ -43,7 +44,7 @@ const search = async (model, fields, populate = "", req, res) => {
   } catch (error) {
     return res.status(500).json({
       status: "error",
-      message: err.message || "Something went wrong during the search",
+      message: error.message || "Something went wrong during the search",
     });
   }
 };

@@ -1,9 +1,16 @@
-module.exports = (query) => {
+module.exports = (query, ...cancleField) => {
   if (!query || typeof query !== "object") return {};
 
   const q = { ...query };
 
-  const excluded = ["page", "sort", "limit", "fields", "search"];
+  const excluded = [
+    "page",
+    "sort",
+    "limit",
+    "fields",
+    "search",
+    ...cancleField,
+  ];
   excluded.forEach((f) => delete q[f]);
 
   const tryParse = (val) => {

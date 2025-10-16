@@ -45,6 +45,9 @@ const register = async (req, res) => {
       data,
     });
   } catch (error) {
+    if (error.code === 11000 && error.keyPattern?.username) {
+      return res.status(400).json({ message: "Username already exists" });
+    }
     console.log(error);
     res.status(400).json({ message: error.message });
   }

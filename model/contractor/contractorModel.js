@@ -35,7 +35,6 @@ const contractorSchema = new mongoose.Schema(
     },
     birthPlace: {
       type: String,
-      required: true,
     },
     address: {
       type: String,
@@ -43,9 +42,11 @@ const contractorSchema = new mongoose.Schema(
     },
     education: {
       type: String,
+      required: true,
     },
     experienceYears: {
       type: Number,
+      required: true,
     },
     resume: {
       type: String,

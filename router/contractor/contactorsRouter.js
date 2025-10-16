@@ -7,14 +7,22 @@ const {
   deleteContractor,
   getById,
   updateContractor,
-} = require("../../controller/users/contractorController");
+} = require("../../controller/contractor/contractorController");
 const upload = require("../../middleware/filesMiddleware");
+const createLimiter = require("../../middleware/rateLimiter");
+
+const registerLimiter = createLimiter({
+  max: 3,
+  windowMs: 60 * 60 * 1000,
+  message:
+    "To many accounts created from this IP, please try again after an hour",
+});
 
 router
   .route("/")
   .get(getAll)
   .post(
-    allowedTo("Admin"),
+    registerLimiter,
     upload("../public/images/profiles").single("profile"),
     addContractor
   )

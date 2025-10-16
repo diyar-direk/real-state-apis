@@ -89,7 +89,7 @@ const updateProperty = async (req, res) => {
       new: true,
       runValidators: true,
     });
-    unlinkFile(checkProperty.coverImage, "property");
+    newCoverImage && unlinkFile(checkProperty.coverImage, "property");
 
     const images = await Promise.all(
       newImages?.map((img) =>

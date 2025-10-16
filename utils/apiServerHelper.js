@@ -8,6 +8,8 @@ class APIServerHelper {
   }
 
   getAll = async (req, res, searchFields, populate = [], withoutCreatedBy) => {
+    const limit = req.query.limit * 1 || 10;
+
     const populatedData = [
       ...populate,
       ...(withoutCreatedBy
@@ -18,23 +20,28 @@ class APIServerHelper {
       return search(this.model, searchFields, populatedData, req, res);
     try {
       const parsedQuery = parsedQueryHelper(req.query);
+
       const features = new APIFeatures(
         this.model.find().lean().populate(populatedData),
-        req.query
+        req.query,
+        parsedQuery
       )
-        .paginate()
         .filter()
         .sort()
-        .fields();
+        .fields()
+        .paginate();
       const [data, totalCount] = await Promise.all([
         features.query,
         this.model.countDocuments(parsedQuery),
       ]);
+      const totalPages = Math.ceil(totalCount / limit);
       res.json({
         message: "operation done successfully",
         results: data.length,
         totalCount,
         data,
+        limit,
+        totalPages,
       });
     } catch (error) {
       return res.status(400).json({ message: error.message });
@@ -95,7 +102,13 @@ class APIServerHelper {
     }
   };
 
-  updateOneById = async (req, res, data = req.body, cb = () => {}) => {
+  updateOneById = async (
+    req,
+    res,
+    data = req.body,
+    onSuccess = () => {},
+    onError = () => {}
+  ) => {
     try {
       const { id } = req.params;
       const updatedData = await this.model.findByIdAndUpdate(id, data, {
@@ -104,8 +117,9 @@ class APIServerHelper {
       });
       if (!updatedData) return res.status(404).json({ message: "not found" });
       res.json({ message: "operation done successfully", data: updatedData });
-      cb();
+      onSuccess();
     } catch (error) {
+      onError();
       return res.status(400).json({ message: error.message });
     }
   };

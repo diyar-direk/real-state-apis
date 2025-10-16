@@ -1,4 +1,4 @@
-const Contractor = require("../../model/users/contractorModel");
+const Contractor = require("../../model/contractor/contractorModel");
 const APIServerHelper = require("../../utils/apiServerHelper");
 const apiServer = new APIServerHelper(Contractor);
 const unlinkFile = require("../../utils/unlinkFile");
@@ -35,24 +35,34 @@ const addContractor = async (req, res) => {
 
 const updateContractor = async (req, res) => {
   const { id } = req.params;
-  if (req.currentUser.role === "Contractor") {
-    if (req.currentUser.profileId !== id)
+  const { body, file } = req;
+  const profile = file?.filename || "";
+
+  if (req.currentUser.role === "Contractor")
+    if (req.currentUser.profileId !== id) {
+      unlinkFile(profile, "profiles");
       return res.status(403).json({ message: "Forbidden" });
-  }
+    }
 
   const contractor = await Contractor.findById(id).lean();
-  if (!contractor)
+  if (!contractor) {
+    unlinkFile(profile, "profiles");
     return res.status(404).json({ message: "contractor not found" });
-  const { body, file } = req;
-  const profile = file ? file.filename : contractor.profile;
-
+  }
   if (body.experienceYears)
     body.experienceYears = parseInt(body.experienceYears, 10);
   if (body.links) body.links = JSON.parse(body.links);
-
-  apiServer.updateOneById(req, res, { ...body, profile }, () => {
-    if (file) unlinkFile(contractor.profile, "profiles");
-  });
+  const prevProfile = contractor.profile;
+  if (profile) body.profile = profile;
+  apiServer.updateOneById(
+    req,
+    res,
+    body,
+    () => {
+      if (file) unlinkFile(prevProfile, "profiles");
+    },
+    () => unlinkFile(profile, "profiles")
+  );
 };
 
 const deleteContractor = (req, res) => {

@@ -12,12 +12,20 @@ connection();
 
 app.use(express.json());
 app.use(cors());
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
+);
 app.use(morgan(":method :url :status :response-time ms"));
 
 app.get("/api/images/:filename", (req, res) => {
   const filename = req.params.filename;
-  const dirs = ["public/images/property", "public/images/profiles"];
+  const dirs = [
+    "public/images/property",
+    "public/images/profiles",
+    "public/images/agency",
+  ];
 
   for (const dir of dirs) {
     const filePath = path.join(__dirname, dir, filename);
@@ -29,15 +37,19 @@ app.get("/api/images/:filename", (req, res) => {
   res.status(404).json({ message: "Image not found" });
 });
 
+
+
 const routers = {
   users: "users/usersRouter",
-  contractors: "users/contactorsRouter",
+  contractors: "contractor/contactorsRouter",
   city: "address/cityRouter",
   region: "address/regionRouter",
   "property-type": "property/propertyTypeRouter",
   "property-status": "property/propertyStatusRouter",
   properties: "property/propertyRouter",
   "property-images": "property/propertyImageRouter",
+  agency: "agency/agencyRouter",
+  home: "home/homeRouter",
 };
 
 Object.entries(routers).forEach(([path, router]) => {

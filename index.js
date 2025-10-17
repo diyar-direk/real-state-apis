@@ -49,7 +49,6 @@ const routers = {
   properties: "property/propertyRouter",
   "property-images": "property/propertyImageRouter",
   agency: "agency/agencyRouter",
-  home: "home/homeRouter",
 };
 
 Object.entries(routers).forEach(([path, router]) => {

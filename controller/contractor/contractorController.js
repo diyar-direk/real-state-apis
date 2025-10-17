@@ -18,7 +18,37 @@ const getAll = async (req, res) => {
       sort,
       isActive,
       includeUnlinked = false,
+      fields,
     } = req.query;
+
+let projectStage = {};
+
+if (fields) {
+ 
+  const fieldList = fields.split(",").map((f) => f.trim());
+  projectStage = fieldList.reduce((acc, field) => {
+    if (field) {
+      const parts = field.split(".");
+      let current = acc;
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (!current[parts[i]]) current[parts[i]] = {};
+        current = current[parts[i]];
+      }
+      current[parts[parts.length - 1]] = 1;
+    }
+    return acc;
+  }, {});
+} else {
+  projectStage = {
+    "user.password": 0,
+    "user.role": 0,
+    "user.profileId": 0,
+    "user.createdAt": 0,
+    "user.updatedAt": 0,
+    "user.__v": 0,
+  };
+}
+
 
     if (search) {
       parsedQuery.$or = [
@@ -95,14 +125,7 @@ const getAll = async (req, res) => {
       { $skip: skip },
       { $limit: Number(limit) },
       {
-        $project: {
-          "user.password": 0,
-          "user.role": 0,
-          "user.profileId": 0,
-          "user.createdAt": 0,
-          "user.updatedAt": 0,
-          "user.__v": 0,
-        },
+        $project: projectStage,
       },
     ]);
 

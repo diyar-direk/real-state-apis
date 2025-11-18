@@ -4,6 +4,7 @@ const apiServer = new APIServerHelper(User);
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Contractor = require("../../model/contractor/contractorModel");
+const { role } = require("../../constants/enums");
 
 const getAllUsers = (req, res) =>
   apiServer.getAll(req, res, ["username"], ["profileId"]);
@@ -28,9 +29,9 @@ const register = async (req, res) => {
     const password = await bcrypt.hash(passwordBeforeHashed, 10);
 
     const createdBy = req.currentUser?._id;
+    if (req.currentUser.role !== role.admin) delete req.body.isActive;
 
     const newUser = await User.create({ ...req.body, password, createdBy });
-
     const data = newUser.toObject();
     const isActive = req.body.isActive || false;
     delete data.password;

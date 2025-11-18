@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { role } = require("../../constants/enums");
 const usersSchema = new mongoose.Schema(
   {
     username: {
@@ -12,21 +13,12 @@ const usersSchema = new mongoose.Schema(
     password: { type: String, required: true, select: false },
     role: {
       type: String,
-      enum: ["Admin", "Contractor"],
-      default: "Contractor",
+      enum: Object.values(role),
+      default: role.contractor,
     },
     profileId: {
       type: mongoose.Schema.Types.ObjectId,
       refPath: "role",
-      validate: {
-        validator: function (value) {
-          if (this.role === "Admin") {
-            return true;
-          }
-          return Boolean(value);
-        },
-        message: "profileId is required for non-admin users",
-      },
     },
     isActive: {
       type: Boolean,
@@ -44,10 +36,10 @@ const usersSchema = new mongoose.Schema(
 );
 
 usersSchema.pre("save", function (next) {
-  if (this.role !== "Admin" && !this.expirationDate) {
-    const oneMonthLater = new Date();
-    oneMonthLater.setMonth(oneMonthLater.getMonth() + 1);
-    this.expirationDate = oneMonthLater;
+  if (this.role !== role.admin && !this.expirationDate) {
+    const oneWeekLater = new Date();
+    oneWeekLater.setDate(oneWeekLater.getDate() + 7);
+    this.expirationDate = oneWeekLater;
   }
   next();
 });

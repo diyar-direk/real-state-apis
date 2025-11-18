@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { gender, social } = require("../../constants/enums");
 
 const contractorSchema = new mongoose.Schema(
   {
@@ -17,7 +18,7 @@ const contractorSchema = new mongoose.Schema(
     gender: {
       type: String,
       required: true,
-      enum: ["Male", "Female"],
+      enum: Object.values(gender),
     },
     phone: {
       type: String,
@@ -28,6 +29,7 @@ const contractorSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
       match: [/^\S+@\S+\.\S+$/, "Please use a valid email address"],
+      required: true,
     },
     birthDate: {
       type: Date,
@@ -38,11 +40,9 @@ const contractorSchema = new mongoose.Schema(
     },
     address: {
       type: String,
-      required: true,
     },
     education: {
       type: String,
-      required: true,
     },
     experienceYears: {
       type: Number,
@@ -57,7 +57,7 @@ const contractorSchema = new mongoose.Schema(
       {
         type: {
           type: String,
-          enum: ["instagram", "facebook", "linkedin", "twitter"],
+          enum: Object.values(social),
           required: true,
         },
         link: {
@@ -66,13 +66,13 @@ const contractorSchema = new mongoose.Schema(
           validate: {
             validator: function (value) {
               switch (this.type) {
-                case "facebook":
+                case social.facebook:
                   return /^https?:\/\/(www\.)?facebook\.com\/.+$/.test(value);
-                case "instagram":
+                case social.instagram:
                   return /^https?:\/\/(www\.)?instagram\.com\/.+$/.test(value);
-                case "linkedin":
+                case social.linkedin:
                   return /^https?:\/\/(www\.)?linkedin\.com\/.+$/.test(value);
-                case "twitter":
+                case social.twitter:
                   return /^https?:\/\/(www\.)?twitter\.com\/.+$/.test(value);
                 default:
                   return false;
@@ -98,10 +98,11 @@ contractorSchema.index({
   middleName: 1,
   lastName: 1,
 });
-
 contractorSchema.index(
-  { email: 1 },
-  { unique: true, partialFilterExpression: { email: { $type: "string" } } }
+  {
+    email: 1,
+  },
+  { unique: true }
 );
 
 module.exports = new mongoose.model("Contractor", contractorSchema);
